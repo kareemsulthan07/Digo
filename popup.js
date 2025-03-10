@@ -21,22 +21,50 @@ const currencies = [
 document.addEventListener('DOMContentLoaded', () => {
     const sourceCurrencySelect = document.getElementById('convertFrom');
     const targetCurrencySelect = document.getElementById('convertTo');
-
+    const swapButton = document.getElementById('swapButton');
+    
+    // Populate currency dropdowns
     currencies.forEach((currency) => {
         const optionFrom = document.createElement('option');
         optionFrom.value = currency;
         optionFrom.text = currency;
         sourceCurrencySelect.appendChild(optionFrom);
-
+        
         const optionTo = document.createElement('option');
         optionTo.value = currency;
         optionTo.text = currency;
         targetCurrencySelect.appendChild(optionTo);
     });
-
+    
+    // Set default values from storage or use defaults
     chrome.storage.local.get(['sourceCurrency', 'targetCurrency'], function (items) {
         sourceCurrencySelect.value = items.sourceCurrency || 'USD';
         targetCurrencySelect.value = items.targetCurrency || 'INR';
     });
+    
+    // Swap currencies button
+    swapButton.addEventListener('click', () => {
+        const tempCurrency = sourceCurrencySelect.value;
+        sourceCurrencySelect.value = targetCurrencySelect.value;
+        targetCurrencySelect.value = tempCurrency;
+        
+        // Save to storage
+        chrome.storage.local.set({
+            'sourceCurrency': sourceCurrencySelect.value,
+            'targetCurrency': targetCurrencySelect.value
+        });
+    });
+    
+    // Save selected currencies when changed
+    sourceCurrencySelect.addEventListener('change', () => {
+        chrome.storage.local.set({
+            'sourceCurrency': sourceCurrencySelect.value
+        });
+    });
+    
+    targetCurrencySelect.addEventListener('change', () => {
+        chrome.storage.local.set({
+            'targetCurrency': targetCurrencySelect.value
+        });
+    });
 });
-

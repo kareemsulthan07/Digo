@@ -1,43 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digo</title>
+    <title>Digo - Instant Currency Converter</title>
     <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --border-color: #e0e0e0;
+            --hover-color: #f5f5f5;
+            --accent-color: #4f46e5;
+            --dropdown-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #1e1e1e;
+                --text-color: #e0e0e0;
+                --border-color: #3a3a3a;
+                --hover-color: #2c2c2c;
+                --accent-color: #6366f1;
+                --dropdown-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            padding: 5px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 16px;
+            width: 240px;
+            transition: all 0.2s ease;
         }
 
-        div p {
-            margin-bottom: 0;
-            font-size: 13px;
-            font-weight: bolder;
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
         }
 
-        div select {
-            margin-top: 0;
-            padding: 5px;
-            margin: 0 0 5px 0;
-            width: 100px;
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .label {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .select-wrapper {
+            position: relative;
+        }
+
+        .select-wrapper:after {
+            content: "";
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 10px;
+            height: 10px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="%234f46e5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+            pointer-events: none;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .select-wrapper:after {
+                background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="%236366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>');
+            }
+        }
+
+        .currency-select {
+            width: 100%;
+            padding: 10px 12px;
+            font-size: 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            appearance: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: var(--dropdown-shadow);
+        }
+
+        .currency-select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+        }
+
+        .currency-select:hover {
+            border-color: var(--accent-color);
+            background-color: var(--hover-color);
+        }
+
+        .swap-button {
+            align-self: center;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: var(--accent-color);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .swap-button:hover {
+            background-color: var(--hover-color);
+            border-color: var(--accent-color);
+        }
+
+        .title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            text-align: center;
+        }
+
+        .subtitle {
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .subtitle {
+                color: #aaa;
+            }
         }
     </style>
 </head>
-
 <body>
-    <div>
-        <p>Convert From :</p>
-        <select id="convertFrom" title="convertFromT"></select>
-    </div>
+    <div class="title">Digo - Instant in-place currency converter</div>
+    
+    <div class="container">
+        <div class="form-group">
+            <label class="label" for="convertFrom">Convert From:</label>
+            <div class="select-wrapper">
+                <select id="convertFrom" class="currency-select" title="convertFromT"></select>
+            </div>
+        </div>
 
-    <div>
-        <p>Convert To :</p>
-        <select id="convertTo" title="convertToT"></select>
-    </div>
+        <button class="swap-button" id="swapButton">⇅</button>
 
+        <div class="form-group">
+            <label class="label" for="convertTo">Convert To:</label>
+            <div class="select-wrapper">
+                <select id="convertTo" class="currency-select" title="convertToT"></select>
+            </div>
+        </div>
+    </div>
     <script src="popup.js"></script>
-    <script src="script.js"></script>
 </body>
 </html>
